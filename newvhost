@@ -3,6 +3,12 @@
 #
 # sudo newvhost local.mysite.com
 
+if [ `whoami` != 'root' ]; then
+	echo "newvhost requires super-user privileges to work."
+	echo "Enter your password to continue..."
+	sudo $0 $* || exit 1
+fi
+
 URL=$1
 FILE=/etc/apache2/extra/httpd-vhosts.conf
 HOSTS=/etc/hosts
