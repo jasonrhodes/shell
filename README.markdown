@@ -19,17 +19,17 @@ This will perform the following actions:
 1. Restarts Apache
 1. Opens the new index.html file in your browser. If you have Google Chrome, it defaults there. Deal with it.
 
-> * Note: If your Apache config doesn't already include the httpd-vhosts.conf file, you'll need to open up /etc/apache2/httpd.conf and uncomment the line that includes it.
+> \* Note: If your Apache config doesn't already include the httpd-vhosts.conf file, you'll need to open up /etc/apache2/httpd.conf and uncomment the line that includes it.
 >
 > ** If you use homebrew, it's just `$brew update` and then `$ brew install coda-cli` -- details here: http://justinhileman.info/coda-cli/
 
 ### To install `newvhost`:
 
 1. Download the script wherever you want, or clone this git repo into something like ~/shell_scripts or what have you
-1. Symlink the script into /usr/local/bin or some other directory in your $PATH
-> * Check what's in the $PATH by running `$ echo $PATH`
+1. Symlink the script into /usr/local/bin or some other directory in your $PATH  
+> * Check what's in the $PATH by running `$ echo $PATH`  
 > * Symlink like this: `$ ln -s [source] [target]`, ie `$ ln -s ~/shell/newvhost /usr/local/bin`
-1. Make the script executable, 0700 works. (`$ chmod 0700 ~/shell/newvhost`)
+1. Make the script executable, 0700 works. `$ chmod 0700 ~/shell/newvhost`
 1. Go nuts.
 
 Fork at will.
