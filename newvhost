@@ -1,0 +1,47 @@
+#!/bin/bash
+# Create a new virtual host in one simple step
+#
+# sudo newvhost local.mysite.com
+
+URL=$1
+FILE=/etc/apache2/extra/httpd-vhosts.conf
+HOSTS=/etc/hosts
+VHOSTS_PATH=~/vhosts
+
+# Create the vhosts directory if it doesn't yet exist
+cd $VHOSTS_PATH || ( mkdir $VHOSTS_PATH && echo "Created ${VHOSTS_PATH} directory" )
+
+# Create virtual host listing in httpd config
+echo -e "\n" >> $FILE
+echo "<VirtualHost *:80>" >> $FILE
+echo "  ServerName ${URL}" >> $FILE
+echo "  DocumentRoot ${VHOSTS_PATH}/${URL}" >> $FILE
+echo "  <Directory ${VHOSTS_PATH}/${URL}>" >> $FILE
+echo "    Options All" >> $FILE
+echo "    AllowOverride All" >> $FILE
+echo "    Order allow,deny" >> $FILE
+echo "    Allow from all" >> $FILE
+echo "  </Directory>" >> $FILE
+echo "  ErrorLog \"${VHOSTS_PATH}/logs/${URL}_error_log\"" >> $FILE
+echo "  CustomLog \"${VHOSTS_PATH}/logs/${URL}_access_log\" common" >> $FILE
+echo "</VirtualHost>" >> $FILE
+
+# Add listing to hosts file
+echo "127.0.0.1    ${URL}" >> $HOSTS
+
+# Make directory, if necessary
+if [ ! -d $VHOSTS_PATH/$URL ]
+then
+  mkdir $VHOSTS_PATH/$URL
+  echo "Directory created at $VHOSTS_PATH/$URL"
+  touch $VHOSTS_PATH/$URL/index.html
+  echo "This is ${URL}" > $VHOSTS_PATH/$URL/index.html
+fi
+
+# If editor commands exist, open as a new project
+( which coda && coda $VHOSTS_PATH/$URL ) || ( which mate && mate $VHOSTS_PATH/$URL )
+
+echo "You created a new virtual host at http://$URL"
+
+# Restart Apache, then open the new URL to verify it works
+sudo apachectl restart && ( open -a /Applications/Google\ Chrome.app http://$URL || open http://$URL )
