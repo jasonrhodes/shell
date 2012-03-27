@@ -27,8 +27,8 @@ This will perform the following actions:
 
 1. Download the script wherever you want, or clone this git repo into something like ~/shell_scripts or what have you
 1. Symlink the script into /usr/local/bin or some other directory in your $PATH  
-> * Check what's in the $PATH by running `$ echo $PATH`  
-> * Symlink like this: `$ ln -s [source] [target]`, ie `$ ln -s ~/shell/newvhost /usr/local/bin`
+    > * Check what's in the $PATH by running `$ echo $PATH`  
+    > * Symlink like this: `$ ln -s [source] [target]`, ie `$ ln -s ~/shell/newvhost /usr/local/bin`
 1. Make the script executable, 0700 works. `$ chmod 0700 ~/shell/newvhost`
 1. Go nuts.
 
