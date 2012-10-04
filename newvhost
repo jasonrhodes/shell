@@ -32,8 +32,8 @@ cd $VHOSTS_PATH || ( mkdir $VHOSTS_PATH && echo "Created ${VHOSTS_PATH} director
 echo -e "\n" >> $FILE
 echo "<VirtualHost *:80>" >> $FILE
 echo "  ServerName ${URL}" >> $FILE
-echo "  DocumentRoot ${VHOSTS_PATH}/${URL}" >> $FILE
-echo "  <Directory ${VHOSTS_PATH}/${URL}>" >> $FILE
+echo "  DocumentRoot ${VHOSTS_PATH}/${DOCROOT}" >> $FILE
+echo "  <Directory ${VHOSTS_PATH}/${DOCROOT}>" >> $FILE
 echo "    Options All" >> $FILE
 echo "    AllowOverride All" >> $FILE
 echo "    Order allow,deny" >> $FILE
@@ -63,4 +63,4 @@ fi
 echo "You created a new virtual host at http://$URL"
 
 # Restart Apache, then open the new URL to verify it works
-sudo apachectl restart && ( open -a /Applications/Google\ Chrome.app http://$URL || open http://$URL ) >/dev/null 2>&1
+sudo apachectl restart && open http://$URL >/dev/null 2>&1
