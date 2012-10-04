@@ -6,17 +6,24 @@
 # Check for root, borrowed from the much better virtualhost.sh script
 # See: https://github.com/pgib/virtualhost.sh/blob/master/virtualhost.sh
 # Or run $ brew install virtualhost.sh
+
 if [ `whoami` != 'root' ]
 then
-	echo "newvhost requires super-user privileges to work."
-	echo "Enter your password to continue..."
-	sudo $0 $* || exit 1
+  echo "newvhost requires super-user privileges to work."
+  echo "Please run again as 'sudo newvhost [virtual host name]"
+  exit 0
 fi
 
 URL=$1
+DOCROOT=$URL
 FILE=/etc/apache2/extra/httpd-vhosts.conf
 HOSTS=/etc/hosts
 VHOSTS_PATH=~/vhosts
+
+if [ $# -gt 1 ]
+then
+  DOCROOT="$URL/$2"
+fi
 
 # Create the vhosts directory if it doesn't yet exist
 cd $VHOSTS_PATH || ( mkdir $VHOSTS_PATH && echo "Created ${VHOSTS_PATH} directory" )
@@ -40,18 +47,20 @@ echo "</VirtualHost>" >> $FILE
 echo "127.0.0.1    ${URL}" >> $HOSTS
 
 # Make directory, if necessary
-if [ ! -d $VHOSTS_PATH/$URL ]
+if [ ! -d $VHOSTS_PATH/$DOCROOT ]
 then
-  mkdir $VHOSTS_PATH/$URL
-  echo "Directory created at $VHOSTS_PATH/$URL"
-  touch $VHOSTS_PATH/$URL/index.html
-  echo "This is ${URL}" > $VHOSTS_PATH/$URL/index.html
+  mkdir -p $VHOSTS_PATH/$DOCROOT
+  echo "Directory created at $VHOSTS_PATH/$DOCROOT"
+  touch $VHOSTS_PATH/$DOCROOT/index.html
+  echo "This is ${URL}" > $VHOSTS_PATH/$DOCROOT/index.html
+  chown -R $SUDO_USER $VHOSTS_PATH/$URL
+  chmod -R 0777 $VHOSTS_PATH/$URL
 fi
 
 # If editor commands exist, open as a new project
-( which coda && coda $VHOSTS_PATH/$URL ) || ( which mate && mate $VHOSTS_PATH/$URL )
+( which subl && subl $VHOSTS_PATH/$URL ) || ( which coda && coda $VHOSTS_PATH/$URL ) || ( which mate && mate $VHOSTS_PATH/$URL ) >/dev/null 2>&1
 
 echo "You created a new virtual host at http://$URL"
 
 # Restart Apache, then open the new URL to verify it works
-sudo apachectl restart && ( open -a /Applications/Google\ Chrome.app http://$URL || open http://$URL )
+sudo apachectl restart && ( open -a /Applications/Google\ Chrome.app http://$URL || open http://$URL ) >/dev/null 2>&1
